@@ -26,7 +26,16 @@ Import-Module Az.Synapse
 #Parameters
 ##########################################################################################################################################################
 $ErrorActionPreference = "Continue"
+$Username = 'sid'
+$Password = 'Password@123'
+$Password = ConvertTo-SecureString -String $Password -AsPlainText -Force
+$Cred = New-Object System.Management.Automation.PSCredential -ArgumentList $Username, $Password
 
+$Query = "select count(*) FROM sys.dm_exec_sessions AS sess
+JOIN sys.dm_exec_connections AS conn
+   ON sess.session_id = conn.session_id 
+   where login_name='sid';"
+$a = invoke-sqlcmd2 -ServerInstance "$AzureSQL_ServerName" -Database "$AzureSQL_DBname" -Credential $Cred -Query "$Query" -Encrypt
 ##########################################################################################################################################################
 #VARIABLES
 ##########################################################################################################################################################
@@ -103,7 +112,7 @@ for ($i = 0; $i -lt $AzureSynapseWorkspaces.Count; $i++) {
             Write-Output "  -> Synapse SQL Pool [$($SynapseSqlPool.SqlPoolName)] found with status [Paused]"
         }
         ##########################################################################################################################################################
-        elseif ($SynapseSqlPool.Status -eq "Online") {
+        elseif ($SynapseSqlPool.Status -eq "Online") -and ($a -eq 1){
             Write-Output "  -> Synapse SQL Pool [$($SynapseSqlPool.SqlPoolName)] found with status [Online]"
             # Pause Synapse SQL Pool
             $startTimePause = Get-Date
