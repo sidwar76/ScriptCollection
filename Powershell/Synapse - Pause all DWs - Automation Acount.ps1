@@ -28,16 +28,16 @@ install-module -name invoke-sqlcmd2
 #Parameters
 ##########################################################################################################################################################
 $ErrorActionPreference = "Continue"
-$Username = 'sid'
-$Password = 'Password@123'
-$Password = ConvertTo-SecureString -String $Password -AsPlainText -Force
-$Cred = New-Object System.Management.Automation.PSCredential -ArgumentList $Username, $Password
+#$Username = 'sid'
+#$Password = 'Password@123'
+#$Password = ConvertTo-SecureString -String $Password -AsPlainText -Force
+#$Cred = New-Object System.Management.Automation.PSCredential -ArgumentList $Username, $Password
 
-$Query = "select count(*) FROM sys.dm_exec_sessions AS sess
-JOIN sys.dm_exec_connections AS conn
-   ON sess.session_id = conn.session_id 
-   where login_name='sid';"
-$a = invoke-sqlcmd2 -ServerInstance "$AzureSQL_ServerName" -Database "$AzureSQL_DBname" -Credential $Cred -Query "$Query" -Encrypt
+#$Query = "select count(*) FROM sys.dm_exec_sessions AS sess
+#JOIN sys.dm_exec_connections AS conn
+#   ON sess.session_id = conn.session_id 
+#   where login_name='sid';"
+#$a = invoke-sqlcmd2 -ServerInstance "$AzureSQL_ServerName" -Database "$AzureSQL_DBname" -Credential $Cred -Query "$Query" -Encrypt
 ##########################################################################################################################################################
 #VARIABLES
 ##########################################################################################################################################################
